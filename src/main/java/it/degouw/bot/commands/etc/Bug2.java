@@ -30,7 +30,7 @@ public class Bug2 implements ICommand, IGuildCommand, IPrivateCommand {
 
 
     public static void sendConfMessage() {
-        MESSAGE.getChannel().sendMessage(Messages.success().setDescription("Submit sucesfully send!").build()).queue();
+        CHANNEL.sendMessage(Messages.success().setDescription("Submit sucesfully send!").build()).queue();
     }
 
 
@@ -169,7 +169,7 @@ public class Bug2 implements ICommand, IGuildCommand, IPrivateCommand {
                     FINAL_MESSAGE = null;
                     CHANNEL = null;
                     TIMER = null;
-                    event.getChannel().sendMessage(new EmbedBuilder().setDescription("Confirmation time expired.").build()).queue();
+                    CHANNEL.sendMessage(new EmbedBuilder().setDescription("Confirmation time expired.").build()).queue();
                     reports.remove(event.getMessageId());
                 }
             }, 20000);

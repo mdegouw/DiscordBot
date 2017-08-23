@@ -15,14 +15,16 @@ public class ReactionListener extends ListenerAdapter {
         //Vote3.handleReaction(event);
 
         try {
-            Bug2.BugReport report = Bug2.reports.get(event.getMessageId().toString());
+            Bug2.BugReport report = Bug2.reports.get(event.getMessageId());
             if (report != null) {
 
                 if (event.getUser().equals(report.getAuthor())) {
                     report.sendConfMessage();
                     report.sendReport(report.getChannel());
-                    report.sendReport(event.getJDA().getTextChannelById("349661947454816256"));
                     report.getTimer().cancel();
+
+                    // TEST: Push report to a channel on my Guild
+                    report.sendReport(event.getJDA().getTextChannelById("349661947454816256"));
                     Bug2.reports.remove(event.getMessageId());
                 }
             }
