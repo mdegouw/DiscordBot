@@ -1,12 +1,15 @@
 package it.degouw.bot;
 
 import it.degouw.bot.commands.ICommand;
+import it.degouw.bot.commands.administration.*;
 import it.degouw.bot.commands.chat.Cat;
 import it.degouw.bot.commands.essentials.Ping;
 import it.degouw.bot.commands.etc.BotStats;
 import it.degouw.bot.commands.etc.Bug;
 import it.degouw.bot.commands.etc.Bug2;
+import it.degouw.bot.commands.guildAdministration.BlackList;
 import it.degouw.bot.commands.guildAdministration.VoiceKick;
+import it.degouw.bot.commands.settings.BotMessage;
 import it.degouw.bot.handler.StartArgumentHandler;
 import it.degouw.bot.listeners.*;
 import it.degouw.bot.reference.STATIC;
@@ -77,12 +80,29 @@ public class Main {
 
     private static void initializeCommands() {
 
-        commands.put("botstats", new BotStats());
-        commands.put("ping", new Ping());
-        commands.put("bug", new Bug());
+        // Administration
+        commands.put("broadcast", new Broadcast());
+        commands.put("guilds", new Guilds());
+        commands.put("restart", new Restart());
+        commands.put("stop", new Stop());
+        commands.put("update", new Update());
+
+        // Guild Administration
         commands.put("vkick", new VoiceKick());
+        commands.put("botmsg", new BotMessage());
+        commands.put("blacklist", new BlackList());
+
+        // Chat
         commands.put("cat", new Cat());
+
+        // Essentials
+        commands.put("ping", new Ping());
+
+        // ETC
         commands.put("bug2", new Bug2());
+        commands.put("bug", new Bug());
+        commands.put("botstats", new BotStats());
+
 
     }
 

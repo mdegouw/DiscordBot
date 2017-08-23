@@ -37,16 +37,23 @@ public class BotMessage implements ICommand, IGuildCommand, IPrivateCommand {
 
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
-        if (!PermissionHandler.isOwner(event.getAuthor(), event.getChannel())) return false;
+        if (!PermissionHandler.isBotOwner(event.getAuthor(), event.getChannel())) return false;
         return true;
     }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) throws ParseException, IOException {
 
+        if (args.length < 1) {
+            custom = false;
+            setSupplyingMessage(event.getJDA());
+            event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.ORANGE).setDescription("Successfully reset bot message to the default!").build()).queue();
+            return;
+        }
+
         custom = true;
 
-        String messageString = Arrays.stream(args).collect(Collectors.joining(" ")).substring(1);
+        String messageString = Arrays.stream(args).collect(Collectors.joining(" ")).substring(0);
         event.getJDA().getPresence().setGame(Game.of(messageString + " | -help | v." + STATIC.VERSION));
         event.getChannel().sendMessage(new EmbedBuilder().setColor(Color.GREEN).setDescription("Successfully set bot message to `" + messageString + "`!").build()).queue();
 

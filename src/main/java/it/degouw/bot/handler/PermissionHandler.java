@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 public class PermissionHandler {
 
-    public static boolean isOwner(User user, MessageChannel channel) {
+    public static boolean isBotOwner(User user, MessageChannel channel) {
         if (STATIC.BOT_OWNER_ID == 0) {
             channel.sendMessage(Messages.error().setDescription("There is no owner ID set in `SETTINGS.txt`.\nIf you are the owner of this bot, please add your Discord user id in the `SETTINGS.txt`!").build()).queue();
             return false;
@@ -21,6 +21,13 @@ public class PermissionHandler {
         if (user.getId().equals(String.valueOf(STATIC.BOT_OWNER_ID)))
             return true;
         channel.sendMessage(Messages.error().setDescription("Only the bots owner (" + user.getJDA().getUserById(STATIC.BOT_OWNER_ID).getAsMention() + ") can use this command.").build()).queue();
+        return false;
+    }
+
+    public static boolean isServerOwner(MessageReceivedEvent event) {
+        if (check(Perm.SERVER_OWNER, event))
+            return true;
+        event.getChannel().sendMessage(Messages.error().setDescription("Only the server owner (" + event.getGuild().getOwner().getAsMention() + ") can use this command.").build()).queue();
         return false;
     }
 
