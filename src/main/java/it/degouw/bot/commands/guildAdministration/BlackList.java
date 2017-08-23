@@ -4,6 +4,7 @@ import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.IGuildCommand;
 import it.degouw.bot.handler.PermissionHandler;
 import it.degouw.bot.permissions.SSSS;
+import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
 import it.degouw.bot.reference.STATIC;
 import it.degouw.bot.util.Messages;
@@ -87,8 +88,8 @@ public class BlackList implements ICommand, IGuildCommand{
     }
 
     @Override
-    public String commandType() {
-        return STATIC.CMDTYPE.guildadmin;
+    public CommandType commandType() {
+        return CommandType.GUILDADMIN;
     }
 
     @Override

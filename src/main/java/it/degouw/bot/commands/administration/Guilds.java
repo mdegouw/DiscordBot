@@ -5,8 +5,8 @@ import it.degouw.bot.commands.IGuildCommand;
 import it.degouw.bot.commands.IPrivateCommand;
 import it.degouw.bot.handler.PermissionHandler;
 import it.degouw.bot.permissions.SSSS;
+import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
-import it.degouw.bot.reference.STATIC;
 import it.degouw.bot.util.Messages;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.OnlineStatus;
@@ -15,25 +15,24 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class Guilds implements ICommand, IGuildCommand, IPrivateCommand{
 
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
 
-        if (!PermissionHandler.isBotOwner(event.getAuthor(), event.getChannel())) { return false; }
-
-        if (args.length < 1){
-            event.getChannel().sendMessage(this.help());
-            return false;
-        }
+        if (!PermissionHandler.check(this.permission(), event)) { return false; }
 
         return true;
     }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) throws ParseException, IOException {
+
+
 
         if ((args.length > 1 ? args[0] : "").equalsIgnoreCase("info")) {
             Guild g;
@@ -52,9 +51,14 @@ public class Guilds implements ICommand, IGuildCommand, IPrivateCommand{
                     .addField("ID", g.getId(), false)
                     .addField("Owner", g.getOwner().getAsMention(), false)
                     .addField("Members", g.getMembers().size() + " (Online: " + g.getMembers().stream().filter(m -> !m.getOnlineStatus().equals(OnlineStatus.OFFLINE)).count() + ")", false)
+                    .addField("Member Roles:", Arrays.stream(SSSS.getMemberRoles(g)).collect(Collectors.joining(" & ")), false)
+                    .addField("Moderator Roles:", Arrays.stream(SSSS.getModeratorRoles(g)).collect(Collectors.joining(" & ")), false)
+                    .addField("Admin Roles:", Arrays.stream(SSSS.getAdminRoles(g)).collect(Collectors.joining(" & ")), false)
+                    .addField("Owner Roles:", Arrays.stream(SSSS.getOwnerRoles(g)).collect(Collectors.joining(" & ")), false)
                     .addField("Prefix on server", "`" + SSSS.getPrefix(g) + "`", false)
                     .build()
             ).queue();
+
             return;
         }
 
@@ -90,8 +94,8 @@ public class Guilds implements ICommand, IGuildCommand, IPrivateCommand{
     }
 
     @Override
-    public String commandType() {
-        return STATIC.CMDTYPE.administration;
+    public CommandType commandType() {
+        return CommandType.ESSENTIALS;
     }
 
     @Override

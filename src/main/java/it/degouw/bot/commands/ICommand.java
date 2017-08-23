@@ -1,5 +1,6 @@
 package it.degouw.bot.commands;
 
+import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -13,7 +14,7 @@ public interface ICommand {
     void executed(boolean success, MessageReceivedEvent event);
     String help();
     String description();
-    String commandType();
+    CommandType commandType();
     Perm permission();
 
 }

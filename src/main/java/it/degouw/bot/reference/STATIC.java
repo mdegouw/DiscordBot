@@ -77,15 +77,15 @@ public class STATIC {
 
     public static String discordJoinMessage = ":heart: Hey, [USER]! Welcome on the [GUILD]! :heart:";
 
-    public class CMDTYPE {
-        public static final String administration = "Administration";
-        public static final String chatutils = "Chat Utilities";
-        public static final String essentials = "Essentials";
-        public static final String etc = "Etc";
-        public static final String music = "Music";
-        public static final String guildadmin = "Guild Administration";
-        public static final String settings = "SettingsCore";
-    }
+//    public class CMDTYPE {
+//        public static final String administration = "Administration";
+//        public static final String chatutils = "Chat Utilities";
+//        public static final String essentials = "Essentials";
+//        public static final String etc = "Etc";
+//        public static final String music = "Music";
+//        public static final String guildadmin = "Guild Administration";
+//        public static final String settings = "SettingsCore";
+//    }
 
     public static Date lastRestart;
 

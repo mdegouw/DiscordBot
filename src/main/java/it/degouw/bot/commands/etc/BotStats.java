@@ -4,6 +4,7 @@ import it.degouw.bot.Main;
 import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.IPrivateCommand;
 import it.degouw.bot.commands.IGuildCommand;
+import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
 import it.degouw.bot.reference.STATIC;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -115,8 +116,8 @@ public class BotStats implements ICommand, IGuildCommand, IPrivateCommand{
     }
 
     @Override
-    public String commandType() {
-        return STATIC.CMDTYPE.etc;
+    public CommandType commandType() {
+        return CommandType.ETC;
     }
 
     @Override

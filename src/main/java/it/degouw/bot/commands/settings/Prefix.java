@@ -1,24 +1,28 @@
-package it.degouw.bot.commands.administration;
+package it.degouw.bot.commands.settings;
 
 import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.IGuildCommand;
-import it.degouw.bot.commands.IPrivateCommand;
-import it.degouw.bot.commands.etc.BotStats;
 import it.degouw.bot.handler.PermissionHandler;
+import it.degouw.bot.permissions.SSSS;
 import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
-import it.degouw.bot.reference.STATIC;
+import it.degouw.bot.util.Messages;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.text.ParseException;
 
-public class Restart implements ICommand, IPrivateCommand, IGuildCommand {
+public class Prefix implements ICommand, IGuildCommand {
 
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
 
         if (!PermissionHandler.check(this.permission(), event)) { return false; }
+
+        if (args.length < 1) {
+            event.getTextChannel().sendMessage(Messages.error().setDescription(":warning: Please enter a valid prefix!").build()).queue();
+            return false;
+        }
 
         return true;
     }
@@ -26,19 +30,8 @@ public class Restart implements ICommand, IPrivateCommand, IGuildCommand {
     @Override
     public void action(String[] args, MessageReceivedEvent event) throws ParseException, IOException {
 
-        //TODO: Fix Restart
-
-        event.getChannel().sendMessage(":warning:  Bot will restart now...").queue();
-
-        BotStats.save();
-
-        if (System.getProperty("os.name").toLowerCase().contains("linux"))
-            Runtime.getRuntime().exec("screen python restart.py");
-        else
-            Runtime.getRuntime().exec("wincmd.exe -restart");
-
-        System.exit(0);
-
+        SSSS.setPrefix(args[0], event.getGuild());
+        event.getTextChannel().sendMessage(Messages.success().setDescription("Prefix successfully changed to `" + args[0] + "`.").build()).queue();
     }
 
     @Override
@@ -48,21 +41,21 @@ public class Restart implements ICommand, IPrivateCommand, IGuildCommand {
 
     @Override
     public String help() {
-        return "USAGE: -restart";
+        return "USAGE: -prefix <new prefix>";
     }
 
     @Override
     public String description() {
-        return "Restart the bot.";
+        return "Set the command prefix for this server";
     }
 
     @Override
     public CommandType commandType() {
-        return CommandType.ESSENTIALS;
+        return CommandType.SETTINGS;
     }
 
     @Override
     public Perm permission() {
-        return Perm.BOT_OWNER;
+        return Perm.OWNER;
     }
 }

@@ -3,6 +3,7 @@ package it.degouw.bot.commands.administration;
 import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.IGuildCommand;
 import it.degouw.bot.handler.PermissionHandler;
+import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
 import it.degouw.bot.reference.STATIC;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -21,7 +22,7 @@ public class Broadcast implements ICommand, IGuildCommand {
         @Override
         public boolean called(String[] args, MessageReceivedEvent event) {
 
-            if (!PermissionHandler.isBotOwner(event.getAuthor(), event.getChannel())) { return false; }
+            if (!PermissionHandler.check(this.permission(), event)) { return false; }
 
             if (args.length < 1) {
                 event.getChannel().sendMessage(this.help()).queue();
@@ -67,8 +68,8 @@ public class Broadcast implements ICommand, IGuildCommand {
         }
 
         @Override
-        public String commandType() {
-            return STATIC.CMDTYPE.administration;
+        public CommandType commandType() {
+            return CommandType.ESSENTIALS;
         }
 
         @Override

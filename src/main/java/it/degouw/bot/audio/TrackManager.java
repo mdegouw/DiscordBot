@@ -69,6 +69,8 @@ public class TrackManager extends AudioEventAdapter{
         queue.clear();
     }
 
+    public void remove(AudioInfo entry) { queue.remove(entry); }
+
     public AudioInfo getTrackInfo(AudioTrack track) {
         return queue.stream().filter(audioInfo -> audioInfo.getTrack().equals(track)).findFirst().orElse(null);
     }

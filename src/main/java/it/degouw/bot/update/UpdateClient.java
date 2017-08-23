@@ -1,4 +1,4 @@
-package it.degouw.bot.commands.update;
+package it.degouw.bot.update;
 
 import it.degouw.bot.reference.STATIC;
 import net.dv8tion.jda.core.EmbedBuilder;

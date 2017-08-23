@@ -1,9 +1,10 @@
 package it.degouw.bot.commands.chat;
 
+import it.degouw.bot.commands.EventListener;
 import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.IGuildCommand;
+import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
-import it.degouw.bot.reference.STATIC;
 import it.degouw.bot.util.Messages;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONException;
@@ -89,8 +90,8 @@ public class Cat implements ICommand, IGuildCommand {
     }
 
     @Override
-    public String commandType() {
-        return STATIC.CMDTYPE.chatutils;
+    public CommandType commandType() {
+        return CommandType.CHATUTILS;
     }
 
     private static String readAll(Reader rd) throws IOException {
@@ -132,4 +133,5 @@ public class Cat implements ICommand, IGuildCommand {
     public Perm permission() {
         return Perm.DEFAULT;
     }
+
 }

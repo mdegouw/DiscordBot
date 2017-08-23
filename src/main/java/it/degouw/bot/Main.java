@@ -1,15 +1,15 @@
 package it.degouw.bot;
 
+
+import it.degouw.bot.commands.EventListener;
 import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.administration.*;
-import it.degouw.bot.commands.chat.Cat;
-import it.degouw.bot.commands.essentials.Ping;
-import it.degouw.bot.commands.etc.BotStats;
-import it.degouw.bot.commands.etc.Bug;
-import it.degouw.bot.commands.etc.Bug2;
-import it.degouw.bot.commands.guildAdministration.BlackList;
-import it.degouw.bot.commands.guildAdministration.VoiceKick;
-import it.degouw.bot.commands.settings.BotMessage;
+import it.degouw.bot.commands.chat.*;
+import it.degouw.bot.commands.essentials.*;
+import it.degouw.bot.commands.etc.*;
+import it.degouw.bot.commands.guildAdministration.*;
+import it.degouw.bot.commands.music.Music;
+import it.degouw.bot.commands.settings.*;
 import it.degouw.bot.handler.StartArgumentHandler;
 import it.degouw.bot.listeners.*;
 import it.degouw.bot.reference.STATIC;
@@ -89,19 +89,47 @@ public class Main {
 
         // Guild Administration
         commands.put("vkick", new VoiceKick());
-        commands.put("botmsg", new BotMessage());
         commands.put("blacklist", new BlackList());
+        commands.put("spacer", new Spacer());
+        commands.put("report", new Report());
+        commands.put("mute", new Mute());
+        commands.put("moveall", new MoveAll());
+        commands.put("kick", new Kick());
 
         // Chat
         commands.put("cat", new Cat());
 
         // Essentials
+        commands.put("help", new Help());
         commands.put("ping", new Ping());
+        commands.put("stats", new Stats());
+        commands.put("info", new Info());
+        commands.put("userinfo", new UserInfo());
 
         // ETC
-        commands.put("bug2", new Bug2());
         commands.put("bug", new Bug());
         commands.put("botstats", new BotStats());
+        commands.put("uptime", new Uptime());
+        commands.put("speedtest", new SpeedTest());
+        commands.put("rand6", new Rand6());
+        commands.put("log", new Log());
+        commands.put("cmdlog", new CmdLog());
+
+
+        // Settings
+        commands.put("botmsg", new BotMessage());
+        commands.put("autorole", new AutoRole());
+        commands.put("permlvl", new PermLvls());
+        commands.put("prefix", new Prefix());
+        commands.put("joinmsg", new ServerJoinMessage());
+        commands.put("leavemsg", new ServerLeftMessage());
+        commands.put("settings", new it.degouw.bot.commands.settings.Settings());
+
+        // Music
+        commands.put("music", new Music());
+        commands.put("m", new Music());
+
+
 
 
     }

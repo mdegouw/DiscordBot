@@ -3,7 +3,8 @@ package it.degouw.bot.commands.administration;
 import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.IGuildCommand;
 import it.degouw.bot.commands.IPrivateCommand;
-import it.degouw.bot.commands.update.UpdateClient;
+import it.degouw.bot.reference.CommandType;
+import it.degouw.bot.update.UpdateClient;
 import it.degouw.bot.handler.PermissionHandler;
 import it.degouw.bot.reference.Perm;
 import it.degouw.bot.reference.STATIC;
@@ -17,7 +18,7 @@ public class Update implements ICommand, IPrivateCommand, IGuildCommand {
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
 
-        if (!PermissionHandler.isBotOwner(event.getAuthor(), event.getChannel())) { return false; }
+        if (!PermissionHandler.check(this.permission(), event)) { return false; }
 
         return true;
     }
@@ -45,8 +46,8 @@ public class Update implements ICommand, IPrivateCommand, IGuildCommand {
     }
 
     @Override
-    public String commandType() {
-        return STATIC.CMDTYPE.administration;
+    public CommandType commandType() {
+        return CommandType.ADMINISTRATION;
     }
 
     @Override

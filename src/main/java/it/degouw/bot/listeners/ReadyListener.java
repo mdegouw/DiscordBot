@@ -1,7 +1,7 @@
 package it.degouw.bot.listeners;
 
 import it.degouw.bot.commands.settings.BotMessage;
-import it.degouw.bot.commands.update.UpdateClient;
+import it.degouw.bot.update.UpdateClient;
 import it.degouw.bot.handler.StartArgumentHandler;
 import it.degouw.bot.permissions.SSSS;
 import it.degouw.bot.reference.STATIC;

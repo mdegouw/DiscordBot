@@ -3,6 +3,7 @@ package it.degouw.bot.commands.essentials;
 import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.IPrivateCommand;
 import it.degouw.bot.commands.IGuildCommand;
+import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
 import it.degouw.bot.reference.STATIC;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -58,7 +59,9 @@ public class Ping implements ICommand, IPrivateCommand, IGuildCommand {
     public String description() {return "pong!"; }
 
     @Override
-    public String commandType() { return STATIC.CMDTYPE.essentials; }
+    public CommandType commandType() {
+        return CommandType.ESSENTIALS;
+    }
 
     @Override
     public Perm permission() { return Perm.DEFAULT; }

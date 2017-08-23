@@ -3,6 +3,7 @@ package it.degouw.bot.commands.etc;
 import it.degouw.bot.commands.ICommand;
 import it.degouw.bot.commands.IGuildCommand;
 import it.degouw.bot.commands.IPrivateCommand;
+import it.degouw.bot.reference.CommandType;
 import it.degouw.bot.reference.Perm;
 import it.degouw.bot.reference.STATIC;
 import it.degouw.bot.util.Messages;
@@ -15,12 +16,12 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Bug implements ICommand, IGuildCommand, IPrivateCommand {
+
+    public static HashMap<String, BugReport> reports = new HashMap<String, BugReport>();
 
     public static User AUTHOR;
     public static Message MESSAGE;
@@ -30,7 +31,7 @@ public class Bug implements ICommand, IGuildCommand, IPrivateCommand {
 
 
     public static void sendConfMessage() {
-        MESSAGE.getChannel().sendMessage(Messages.success().setDescription("Submit sucesfully send!").build()).queue();
+        CHANNEL.sendMessage(Messages.success().setDescription("Submit sucesfully send!").build()).queue();
     }
 
 
@@ -57,8 +58,6 @@ public class Bug implements ICommand, IGuildCommand, IPrivateCommand {
     public void action(String[] args, MessageReceivedEvent event) throws ParseException, IOException {
 
         try {
-
-            CHANNEL = event.getChannel();
 
         } catch (Exception e) {
 
@@ -87,36 +86,10 @@ public class Bug implements ICommand, IGuildCommand, IPrivateCommand {
             type = argsString.split("\n").length > 3 ? argsString.split("\n")[1] : type;
             message = argsString.split("\n").length > 3 ? Arrays.stream(argsString.split("\n")).skip(2).collect(Collectors.joining("\n")) : argsString;
 
-            MESSAGE = event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle("MESSAGE PREVIEW", null)
-                    .addField("Title", title, true)
-                    .addField("Type", type, true)
-                    .addField("Message", message, false)
-                    .setFooter("Click on the reaction \uD83D\uDC4D to send the message. Else just dont klick ;)", null)
-                    .build()
-            ).complete();
-            MESSAGE.addReaction("\uD83D\uDC4D").queue();
-            AUTHOR = event.getMessage().getAuthor();
 
-            FINAL_MESSAGE = new EmbedBuilder()
-                    .addField("Message ID", event.getMessage().getId(), false)
-                    .addField("Author", event.getAuthor().getName(), false)
-                    .addField("Title", title, true)
-                    .addField("Type", type, true)
-                    .addField("Message", message, false);
+            BugReport report = new BugReport(title, type, message, event);
 
-            TIMER = new Timer();
-            TIMER.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    AUTHOR = null;
-                    MESSAGE = null;
-                    FINAL_MESSAGE = null;
-                    CHANNEL = null;
-                    TIMER = null;
-                    event.getChannel().sendMessage(new EmbedBuilder().setDescription("Confirmation time expired.").build()).queue();
-                }
-            }, 20000);
+            reports.put(report.getPreviewId(), report);
 
         }
 
@@ -139,12 +112,109 @@ public class Bug implements ICommand, IGuildCommand, IPrivateCommand {
     }
 
     @Override
-    public String commandType() {
-        return STATIC.CMDTYPE.etc;
+    public CommandType commandType() {
+        return CommandType.ETC;
     }
 
     @Override
     public Perm permission() {
         return Perm.DEFAULT;
     }
+
+
+    public static class BugReport {
+        private String title = "Bug report / Suggestion";
+        private String type = "unspecified";
+        private String message = "";
+
+        private User AUTHOR;
+        private Message PREVIEW_MESSAGE;
+        private EmbedBuilder FINAL_MESSAGE;
+        private MessageChannel CHANNEL;
+        private Timer TIMER = new Timer();
+        private MessageReceivedEvent event;
+
+
+        public BugReport(String title, String type, String message, MessageReceivedEvent event) {
+            this.title = title;
+            this.type = type;
+            this.message = message;
+            this.event = event;
+
+            this.CHANNEL = event.getChannel();
+
+            this.PREVIEW_MESSAGE = CHANNEL.sendMessage(new EmbedBuilder()
+                    .setTitle("MESSAGE PREVIEW", null)
+                    .addField("Title", title, true)
+                    .addField("Type", type, true)
+                    .addField("Message", message, false)
+                    .setFooter("Click on the reaction \uD83D\uDC4D to send the message. Else just dont klick ;)", null)
+                    .build()
+            ).complete();
+            this.PREVIEW_MESSAGE.addReaction("\uD83D\uDC4D").queue();
+            this.AUTHOR = event.getMessage().getAuthor();
+
+            this.FINAL_MESSAGE = new EmbedBuilder()
+                    .addField("Message ID", event.getMessage().getId(), false)
+                    .addField("Author", event.getAuthor().getName(), false)
+                    .addField("Title", title, true)
+                    .addField("Type", type, true)
+                    .addField("Message", message, false);
+
+            this.TIMER = new Timer();
+            this.TIMER.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    AUTHOR = null;
+                    MESSAGE = null;
+                    FINAL_MESSAGE = null;
+                    CHANNEL = null;
+                    TIMER = null;
+                    CHANNEL.sendMessage(new EmbedBuilder().setDescription("Confirmation time expired.").build()).queue();
+                    reports.remove(event.getMessageId());
+                }
+            }, 20000);
+
+        }
+
+        public void sendConfMessage() {
+            this.CHANNEL.sendMessage(Messages.success().setDescription("Submit sucesfully send!").build()).queue();
+        }
+
+        public void sendReport(MessageChannel channel) {
+            channel.sendMessage(this.FINAL_MESSAGE.build()).queue();
+        }
+
+
+        public Message getPreviewMessage() {
+            return PREVIEW_MESSAGE;
+        }
+
+        public User getAuthor() {
+            return AUTHOR;
+        }
+
+        public Timer getTimer() {
+            return TIMER;
+        }
+
+        public EmbedBuilder getFinalMessage() {
+            return FINAL_MESSAGE;
+        }
+
+        public MessageChannel getChannel() {
+            return CHANNEL;
+        }
+
+        public MessageReceivedEvent getEvent() {
+            return event;
+        }
+
+        public String getPreviewId() {
+            return this.PREVIEW_MESSAGE.getId();
+        }
+
+    }
+
+
 }
